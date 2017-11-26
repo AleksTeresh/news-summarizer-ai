@@ -270,9 +270,7 @@ class Batcher(object):
       except StopIteration: # if there are no more examples:
         tf.logging.info("The example generator for this example queue filling thread has exhausted data.")
         tf.logging.info("single_pass mode is on, so we've finished reading dataset. This thread is stopping.")
-        time.sleep(0.01)
-        continue
-        # break
+        break
 
       abstract_sentences = [sent.strip() for sent in data.abstract2sents(abstract)] # Use the <s> and </s> tags in abstract to get a list of sentences.
       example = Example(article, abstract_sentences, self._vocab, self._hps) # Process into an Example.

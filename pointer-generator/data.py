@@ -16,6 +16,7 @@
 
 """This file contains code to read the train/eval/test data from file and process it, and read the vocab data from file and process it"""
 
+import os
 import glob
 import random
 import struct
@@ -123,10 +124,6 @@ def example_generator(data_path, single_pass):
   """
   while True:
     filelist = glob.glob(data_path) # get the list of datafiles
-    
-    if not filelist: 
-      time.sleep(0.01)
-      continue
 
     filelist = sorted(filelist)
     
@@ -138,9 +135,9 @@ def example_generator(data_path, single_pass):
         str_len = struct.unpack('q', len_bytes)[0]
         example_str = struct.unpack('%ds' % str_len, reader.read(str_len))[0]
         yield example_pb2.Example.FromString(example_str)
-    # if single_pass:
-    #   print("example_generator completed reading all datafiles. No more data.")
-    #   break
+    if single_pass:
+      print("example_generator completed reading all datafiles. No more data.")
+      break
 
 
 def article2ids(article_words, vocab):
